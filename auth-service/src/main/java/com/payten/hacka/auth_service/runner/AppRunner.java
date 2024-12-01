@@ -26,7 +26,7 @@ public class AppRunner {
     @Bean
     CommandLineRunner loadData() {
         return args -> {
-            Address address = new Address("Serbia", "Belgrade",  "11000", "Knez Mihailova", "6/6", null);
+            Address address = new Address("Serbia", "Belgrade",  "11000", "Knez Mihailova", "6/6", false, null);
             address = addressRepository.save(address);
 
             Category category = new Category("Education", "Faculty of Computing");
@@ -47,7 +47,9 @@ public class AppRunner {
 
             Business business1 = new Business(category, "RAF", company, List.of(user));
             Business business2 = new Business(category, "CET", company, List.of(user));
-            business1.setAddresses(List.of(address));
+            Address address2 = new Address("Serbia", "Belgrade",  "11000", "Knez Mihailova", "6/5", true, null);
+            address2 = addressRepository.save(address2);
+            business1.setAddresses(List.of(address2));
 
             businessRepository.save(business1);
             businessRepository.save(business2);

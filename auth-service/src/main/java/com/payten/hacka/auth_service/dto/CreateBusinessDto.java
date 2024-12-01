@@ -31,5 +31,5 @@ public class CreateBusinessDto {
     private UUID company;
     private List<UUID> managers;
     @NotNull
-    private List<AddressDto> addresses;
+    private List<UUID> addresses;
 }
