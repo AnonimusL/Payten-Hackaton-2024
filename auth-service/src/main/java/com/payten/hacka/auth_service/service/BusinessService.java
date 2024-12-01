@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface BusinessService {
     List<BusinessDto> getAll();
+
+    List<BusinessDto> getAllByCategory(String category);
 }
