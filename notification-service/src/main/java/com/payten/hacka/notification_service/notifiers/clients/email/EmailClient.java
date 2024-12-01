@@ -43,31 +43,24 @@ public class EmailClient implements IEmailClient {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
-            // Create the message helper
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
             helper.setFrom("vnikolic7821rn@raf.rs");
             helper.setTo(message.getToEmail());
             helper.setSubject(message.getMessageSubject());
 
-            // Convert Base64 string to byte array for attachment
             byte[] qrCodeBytes = Base64.getDecoder().decode(message.getQrCode());
 
-            // Add the image as an inline attachment using ByteArrayDataSource
             ByteArrayDataSource dataSource = new ByteArrayDataSource(qrCodeBytes, "image/png");
             helper.addAttachment("qr.png", dataSource); // Content ID: qrCodeImage
 
-            // HTML content referencing the embedded image
             String htmlContent = "<html><body>" +
                     "<p>" + message.getMessageContent() + "</p>" +
                     "</body></html>";
 
             helper.setText(htmlContent, true);  // 'true' indicates the content is HTML
 
-            // Send the email
             javaMailSender.send(mimeMessage);
-            System.out.println("Email sent!");
-
             return mimeMessage;
         } catch (Exception e) {
             e.printStackTrace();
