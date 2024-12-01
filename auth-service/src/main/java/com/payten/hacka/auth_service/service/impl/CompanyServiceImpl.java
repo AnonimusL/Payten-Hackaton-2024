@@ -32,6 +32,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public BusinessDetailDto addBusiness(CreateBusinessDto createBusinessDto) {
         Business business = modelMapper.map(createBusinessDto, Business.class);
+        if(business.getCompany() == null) throw new NotFoundException(String.format("company with id: %s not found", createBusinessDto.getCompany()));
+        if(business.getCategory() == null) throw new NotFoundException(String.format("category with id: %s not found", createBusinessDto.getCategory()));
+
         List<Address> addresses = createBusinessDto.getAddresses().stream()
                 .map(addressDto -> modelMapper.map(addressDto, Address.class))
                 .collect(Collectors.toList());

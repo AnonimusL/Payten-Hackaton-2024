@@ -29,6 +29,8 @@ public class User extends BaseEntity {
     private List<Business> business;
     @ManyToOne
     private Company company;
+    @ManyToOne
+    private Address address;
 
     public User(String email, String password, String firstName, String lastName, Role role) {
         this.email = email;
@@ -38,8 +40,4 @@ public class User extends BaseEntity {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return this.email + this.company;
-    }
 }

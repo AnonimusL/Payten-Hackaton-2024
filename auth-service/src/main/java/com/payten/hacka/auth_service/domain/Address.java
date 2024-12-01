@@ -15,16 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Address extends BaseEntity{
-    @NotBlank
+public class Address extends BaseEntity {
     private String country;
-    @NotBlank
     private String city;
-    @NotBlank
     private String postcode;
-    @NotBlank
     private String street;
-    @NotBlank
     private String number;
     @ManyToMany(mappedBy = "addresses")
     private List<Business> businesses;

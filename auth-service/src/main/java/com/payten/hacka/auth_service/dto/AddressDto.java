@@ -11,14 +11,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AddressDto {
-    @NotBlank
     private String country;
-    @NotBlank
     private String city;
-    @NotBlank
     private String postcode;
-    @NotBlank
     private String street;
-    @NotBlank
     private String number;
 }
