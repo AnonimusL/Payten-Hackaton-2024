@@ -3,11 +3,13 @@ package com.payten.hacka.notification_service.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "notifications", indexes = {@Index(columnList = "email")})
+@NoArgsConstructor
 @Data
 public class Notification {
 

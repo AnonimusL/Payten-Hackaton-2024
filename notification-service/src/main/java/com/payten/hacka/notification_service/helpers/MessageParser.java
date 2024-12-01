@@ -1,9 +1,9 @@
-package com.payten.hacka.notification_service.notifiers.clients.email;
+package com.payten.hacka.notification_service.helpers;
 
 import com.payten.hacka.notification_service.domain.Message;
 import org.json.JSONObject;
 
-public class EmailMessageParser {
+public class MessageParser {
     public static Message parse(String jsonMessage) {
         JSONObject messageJson = new JSONObject(jsonMessage);
 
