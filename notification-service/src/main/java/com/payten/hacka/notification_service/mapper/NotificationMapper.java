@@ -2,7 +2,9 @@ package com.payten.hacka.notification_service.mapper;
 
 import com.payten.hacka.notification_service.domain.Notification;
 import com.payten.hacka.notification_service.dto.NotificationDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class NotificationMapper implements IMapper<Notification, NotificationDto> {
 
     public NotificationMapper() {

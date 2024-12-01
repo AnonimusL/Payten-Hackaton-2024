@@ -4,39 +4,33 @@ import com.payten.hacka.notification_service.domain.Message;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 
+import java.util.Properties;
+
+@Component
 public class EmailClient implements IEmailClient {
 
-    private final EmailConfiguration emailConfiguration;
-    private final Session clientSession;
+    private final JavaMailSender javaMailSender;
 
-    public EmailClient (EmailConfiguration emailConfiguration) {
-        this.emailConfiguration = emailConfiguration;
-        this.clientSession = authenticate();
-    }
-
-    private Session authenticate() {
-        return Session.getInstance(this.emailConfiguration.getEmailProperties(), new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(emailConfiguration.getUsername(), emailConfiguration.getPassword());
-            }
-        });
+    public EmailClient (JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
     }
 
     @Override
     public void sendEmail(Message message) {
         try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setTo(message.getToEmail());
+            helper.setSubject(message.getMessageSubject());
+            helper.setText(message.getMessageContent());
+            helper.setFrom("opremise123@gmail.com");
 
-            jakarta.mail.Message mimeMessage = new MimeMessage(this.clientSession);
-            mimeMessage.setFrom(new InternetAddress(this.emailConfiguration.getUsername()));
-            mimeMessage.setRecipients(jakarta.mail.Message.RecipientType.TO, InternetAddress.parse(message.getToEmail()));
-            mimeMessage.setSubject(message.getMessageSubject());
-            mimeMessage.setText(message.getMessageContent());
-
-            Transport.send(mimeMessage);
-
-            System.out.println("Email sent!");
+            javaMailSender.send(mimeMessage);
+            System.out.println("Email sent successfully!");
         } catch (Exception e) {
             throw new RuntimeException("Failed to send email", e);
         }

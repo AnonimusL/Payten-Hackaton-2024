@@ -25,15 +25,18 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-security")
+//	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("jakarta.mail:jakarta.mail-api:2.1.0")
-	implementation("com.sun.mail:jakarta.mail:2.1.0")
+//	implementation("jakarta.mail:jakarta.mail-api:2.1.0")
 	implementation("org.json:json:20240303")
+	implementation("org.springframework.boot:spring-boot-starter-mail")
+
+	implementation("org.springframework.boot:spring-boot-starter-amqp")
+
 	compileOnly("org.projectlombok:lombok")
-	compileOnly("com.rabbitmq:amqp-client:5.22.0")
 	runtimeOnly("com.h2database:h2")
+
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")

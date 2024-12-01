@@ -2,39 +2,51 @@ package com.payten.hacka.notification_service.rmq;
 
 import com.payten.hacka.notification_service.notifiers.INotifier;
 import com.rabbitmq.client.*;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.support.AmqpHeaders;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
+@Component
 public class RMQConsumer {
 
-    private final String queueName;
     private final INotifier notifier;
 
-    public RMQConsumer(String queueName, INotifier notifier) {
-        this.queueName = queueName;
+    public RMQConsumer (INotifier notifier) {
         this.notifier = notifier;
     }
 
-    public void start() {
-        try {
-            ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("localhost");
-
-            Connection connection = factory.newConnection();
-            Channel channel = connection.createChannel();
-            channel.queueDeclare(queueName, false, false, false, null);
-
-            System.out.println("Waiting for the carrot...");
-
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                String messageBody = new String(delivery.getBody());
-                notifier.sendNotification(messageBody);
-            };
-
-            channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {});
-        } catch (IOException | TimeoutException e) {
-            throw new RuntimeException("Failed to start RabbitMQReceiver", e);
+    @RabbitListener(queues = "application_topic_queue")
+    public void handleMessage(String message, @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String routingKey) {
+        switch (routingKey) {
+            case "account.reset_password":
+                handleResetPassword(message);
+                break;
+            case "account.validate_email":
+                System.out.println("AHAHAAAA");
+                handleValidateEmail(message);
+                break;
+            case "rental.rent":
+                System.out.println("TU SAM");
+                handleRent(message);
+                break;
+            default:
+                System.out.println("Routing key invalid " + routingKey);
         }
+    }
+
+    private void handleResetPassword(String message) {
+        return;
+    }
+
+    private void handleValidateEmail(String message) {
+        return;
+    }
+
+    private void handleRent(String message) {
+        this.notifier.sendNotification(message);
     }
 }

@@ -5,12 +5,15 @@ import com.payten.hacka.notification_service.domain.NotificationType;
 import com.payten.hacka.notification_service.dto.NotificationDto;
 import com.payten.hacka.notification_service.mapper.IMapper;
 import com.payten.hacka.notification_service.repository.NotificationRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class NotificationServiceImpl implements NotificationService {
 
     private NotificationRepository notificationRepository;
