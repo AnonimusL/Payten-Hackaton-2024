@@ -2,11 +2,13 @@ package com.payten.hacka.auth_service.service.impl;
 
 import com.payten.hacka.auth_service.domain.Address;
 import com.payten.hacka.auth_service.domain.Business;
+import com.payten.hacka.auth_service.domain.Company;
 import com.payten.hacka.auth_service.domain.User;
 import com.payten.hacka.auth_service.dto.AddressDto;
 import com.payten.hacka.auth_service.dto.BusinessDto;
 import com.payten.hacka.auth_service.dto.CompanyDto;
 import com.payten.hacka.auth_service.dto.CreateBusinessDto;
+import com.payten.hacka.auth_service.exceptions.NotFoundException;
 import com.payten.hacka.auth_service.repository.AddressRepository;
 import com.payten.hacka.auth_service.repository.BusinessRepository;
 import com.payten.hacka.auth_service.repository.CompanyRepository;
@@ -15,6 +17,7 @@ import com.payten.hacka.auth_service.service.CompanyService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,7 +57,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto getCompanyDetails(UUID id) {
-        return null;
+        Company company = companyRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("company with id %s not found",id)));
+
+        return modelMapper.map(company, CompanyDto.class);
     }
 
     @Override
