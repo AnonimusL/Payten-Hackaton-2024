@@ -53,6 +53,7 @@ public class SecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**", "/webjars/swagger-ui/**").permitAll()
                 .requestMatchers("/target-user/**").permitAll()
+                .requestMatchers("/company/business").hasRole("COMPANY_MANAGER")
                 .requestMatchers(match(HTTP.POST, "/api/users", "/target-user/**")).permitAll()
                 .requestMatchers(match(HTTP.POST, "/api/users", "/api/target-user/**")).permitAll()
                 .requestMatchers(match(HTTP.GET, "/api/permissions")).hasAnyAuthority("can_update_users", "can_create_users")

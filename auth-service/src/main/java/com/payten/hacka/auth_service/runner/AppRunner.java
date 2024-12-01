@@ -33,10 +33,10 @@ public class AppRunner {
             category = categoryRepository.save(category);
 
             String ep = passwordEncoder.encode("12345678");
-            User user = new User("email@gmail.rs", ep, "Ime", "Prezime", Role.ROLE_BUSINESS_MANAGER);
+            User user = new User("email@gmail.rs", ep, "Ime", "Prezime", Role.COMPANY_MANAGER);
             userRepository.save(user);
 
-            User user2 = new User("email2@gmail.rs", ep, "Ime", "Prezime", Role.ROLE_CLIENT);
+            User user2 = new User("email2@gmail.rs", ep, "Ime", "Prezime", Role.CLIENT);
             userRepository.save(user2);
 
             Company company = new Company("RAF", address, null, List.of(user));

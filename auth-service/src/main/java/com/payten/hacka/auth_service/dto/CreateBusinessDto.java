@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -27,8 +28,8 @@ public class CreateBusinessDto {
     @NotBlank
     private String name;
     @NotBlank
-    private String company;
-    private List<String> managers;
+    private UUID company;
+    private List<UUID> managers;
     @NotNull
-    private List<Address> addresses;
+    private List<AddressDto> addresses;
 }

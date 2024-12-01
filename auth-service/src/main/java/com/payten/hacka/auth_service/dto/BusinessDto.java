@@ -1,5 +1,6 @@
 package com.payten.hacka.auth_service.dto;
 
+import com.payten.hacka.auth_service.domain.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BusinessDto {
-    private String category;
+    private Category category;
     private String name;
     private CompanyDto company;
 
