@@ -22,13 +22,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Setter
 public class Business extends BaseEntity {
-    public Business(Category category, String name, Company company, List<User> managers) {
-        this.category = category;
-        this.name = name;
-        this.company = company;
-        this.managers = managers;
-    }
-
     @ManyToOne
     private Category category;
     private String name;
@@ -50,4 +43,11 @@ public class Business extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name="address_id")
     )
     private List<Address> addresses;
+
+    public Business(Category category, String name, Company company, List<User> managers) {
+        this.category = category;
+        this.name = name;
+        this.company = company;
+        this.managers = managers;
+    }
 }
