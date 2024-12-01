@@ -11,4 +11,6 @@ public interface CompanyService {
     CompanyDetailDto updateCompanyAddress(UUID id, AddressDto addressDto);
 
     List<CompanyDto> getAll();
+
+    CompanyDto addCompany(CreateCompanyDto createCompanyDto);
 }

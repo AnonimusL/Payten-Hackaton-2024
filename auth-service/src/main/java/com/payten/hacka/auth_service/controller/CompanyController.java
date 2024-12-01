@@ -26,6 +26,11 @@ public class CompanyController {
     private ResponseEntity<CompanyDetailDto> aboutCompany(@PathVariable("id") UUID companyId){
         return new ResponseEntity<>(companyService.getCompanyDetails(companyId), HttpStatus.OK);
     }
+
+    @PostMapping
+    private ResponseEntity<CompanyDto> registerCompany(@RequestBody CreateCompanyDto createCompanyDto){
+        return new ResponseEntity<>(companyService.addCompany(createCompanyDto), HttpStatus.OK);
+    }
     @PostMapping("/business")
    private ResponseEntity<BusinessDetailDto> registerBusiness(@RequestBody CreateBusinessDto createBusinessDto){
         return new ResponseEntity<>(companyService.addBusiness(createBusinessDto), HttpStatus.OK);

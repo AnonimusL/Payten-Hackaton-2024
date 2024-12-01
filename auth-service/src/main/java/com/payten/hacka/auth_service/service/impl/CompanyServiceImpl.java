@@ -77,4 +77,20 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.findAll().stream().map(company -> modelMapper.map(company, CompanyDto.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public CompanyDto addCompany(CreateCompanyDto createCompanyDto) {
+        Address address = modelMapper.map(createCompanyDto.getMainAddress(), Address.class);
+        address = addressRepository.save(address);
+
+        User manager = modelMapper.map(createCompanyDto.getManager(), User.class);
+        manager = userRepository.save(manager);
+
+        Company company = modelMapper.map(createCompanyDto, Company.class);
+        company.setMainAddress(address);
+        company.setManagers(List.of(manager));
+        companyRepository.save(company);
+
+        return modelMapper.map(company, CompanyDto.class);
+    }
 }
