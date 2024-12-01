@@ -2,10 +2,8 @@ package com.payten.hacka.auth_service.config;
 
 import com.payten.hacka.auth_service.domain.Address;
 import com.payten.hacka.auth_service.domain.Business;
-import com.payten.hacka.auth_service.domain.Category;
 import com.payten.hacka.auth_service.domain.User;
 import com.payten.hacka.auth_service.dto.AddressDto;
-import com.payten.hacka.auth_service.dto.BusinessDto;
 import com.payten.hacka.auth_service.dto.CreateBusinessDto;
 import com.payten.hacka.auth_service.dto.UserDto;
 import com.payten.hacka.auth_service.mapper.CategoryMapperResolver;

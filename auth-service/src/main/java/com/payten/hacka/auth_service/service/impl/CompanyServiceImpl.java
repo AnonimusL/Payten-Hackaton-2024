@@ -4,10 +4,7 @@ import com.payten.hacka.auth_service.domain.Address;
 import com.payten.hacka.auth_service.domain.Business;
 import com.payten.hacka.auth_service.domain.Company;
 import com.payten.hacka.auth_service.domain.User;
-import com.payten.hacka.auth_service.dto.AddressDto;
-import com.payten.hacka.auth_service.dto.BusinessDto;
-import com.payten.hacka.auth_service.dto.CompanyDto;
-import com.payten.hacka.auth_service.dto.CreateBusinessDto;
+import com.payten.hacka.auth_service.dto.*;
 import com.payten.hacka.auth_service.exceptions.NotFoundException;
 import com.payten.hacka.auth_service.repository.AddressRepository;
 import com.payten.hacka.auth_service.repository.BusinessRepository;
@@ -17,7 +14,6 @@ import com.payten.hacka.auth_service.service.CompanyService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +30,7 @@ public class CompanyServiceImpl implements CompanyService {
     private UserRepository userRepository;
     private ModelMapper modelMapper;
     @Override
-    public BusinessDto addBusiness(CreateBusinessDto createBusinessDto) {
+    public BusinessDetailDto addBusiness(CreateBusinessDto createBusinessDto) {
         Business business = modelMapper.map(createBusinessDto, Business.class);
         List<Address> addresses = createBusinessDto.getAddresses().stream()
                 .map(addressDto -> modelMapper.map(addressDto, Address.class))
@@ -52,18 +48,31 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         business = businessRepository.save(business);
-        return modelMapper.map(business, BusinessDto.class);
+        return modelMapper.map(business, BusinessDetailDto.class);
     }
 
     @Override
-    public CompanyDto getCompanyDetails(UUID id) {
+    public CompanyDetailDto getCompanyDetails(UUID id) {
         Company company = companyRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("company with id %s not found",id)));
 
-        return modelMapper.map(company, CompanyDto.class);
+        return modelMapper.map(company, CompanyDetailDto.class);
     }
 
     @Override
-    public CompanyDto updateCompanyAddress(UUID id, AddressDto addressDto) {
-        return null;
+    public CompanyDetailDto updateCompanyAddress(UUID id, AddressDto addressDto) {
+        Company company = companyRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("company with id %s not found",id)));
+
+        Address address = modelMapper.map(addressDto, Address.class);
+        address = addressRepository.save(address);
+
+        company.setMainAddress(address);
+        company = companyRepository.save(company);
+        return modelMapper.map(company, CompanyDetailDto.class);
+    }
+
+    @Override
+    public List<CompanyDto> getAll() {
+        return companyRepository.findAll().stream().map(company -> modelMapper.map(company, CompanyDto.class))
+                .collect(Collectors.toList());
     }
 }

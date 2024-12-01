@@ -13,7 +13,5 @@ import java.util.List;
 @NoArgsConstructor
 public class CompanyDto {
     private String name;
-    private List<UserDto> managers;
     private AddressDto address;
-    private List<CompanyBusinessDto> businesses;
 }

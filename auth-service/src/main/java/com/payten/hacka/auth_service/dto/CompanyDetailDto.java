@@ -1,6 +1,5 @@
 package com.payten.hacka.auth_service.dto;
 
-import com.payten.hacka.auth_service.domain.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BusinessDto {
-    private Category category;
+public class CompanyDetailDto {
     private String name;
-    private List<AddressDto> addresses;
+    private List<UserDto> managers;
+    private AddressDto address;
+    private List<CompanyBusinessDto> businesses;
 }

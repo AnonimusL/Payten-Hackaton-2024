@@ -8,12 +8,14 @@ import lombok.Setter;
 
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class BusinessDto {
+@AllArgsConstructor
+@NoArgsConstructor
+public class BusinessDetailDto {
     private Category category;
     private String name;
+    private CompanyDto company;
+    private List<UserDto> managers;
     private List<AddressDto> addresses;
 }

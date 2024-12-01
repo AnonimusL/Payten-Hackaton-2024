@@ -1,15 +1,14 @@
 package com.payten.hacka.auth_service.service;
 
-import com.payten.hacka.auth_service.dto.AddressDto;
-import com.payten.hacka.auth_service.dto.BusinessDto;
-import com.payten.hacka.auth_service.dto.CompanyDto;
-import com.payten.hacka.auth_service.dto.CreateBusinessDto;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import com.payten.hacka.auth_service.dto.*;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface CompanyService {
-    BusinessDto addBusiness(CreateBusinessDto createBusinessDto);
-    CompanyDto getCompanyDetails(UUID id);
-    CompanyDto updateCompanyAddress(UUID id, AddressDto addressDto);
+    BusinessDetailDto addBusiness(CreateBusinessDto createBusinessDto);
+    CompanyDetailDto getCompanyDetails(UUID id);
+    CompanyDetailDto updateCompanyAddress(UUID id, AddressDto addressDto);
+
+    List<CompanyDto> getAll();
 }
