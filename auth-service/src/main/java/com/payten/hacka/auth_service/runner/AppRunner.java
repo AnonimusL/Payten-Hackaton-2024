@@ -7,6 +7,7 @@ import org.hibernate.Cache;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class AppRunner {
     private CompanyRepository companyRepository;
     private AddressRepository addressRepository;
     private BusinessRepository businessRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     CommandLineRunner loadData() {
@@ -30,11 +32,18 @@ public class AppRunner {
             Category category = new Category("Education", "Faculty of Computing");
             category = categoryRepository.save(category);
 
-            User user = new User("email@gmail.rs", "1234", "Ime", "Prezime", Role.ROLE_BUSINESS_MANAGER);
+            String ep = passwordEncoder.encode("12345678");
+            User user = new User("email@gmail.rs", ep, "Ime", "Prezime", Role.ROLE_BUSINESS_MANAGER);
             userRepository.save(user);
+
+            User user2 = new User("email2@gmail.rs", ep, "Ime", "Prezime", Role.ROLE_CLIENT);
+            userRepository.save(user2);
 
             Company company = new Company("RAF", address, null, List.of(user));
             companyRepository.save(company);
+
+            user.setCompany(company);
+            userRepository.save(user);
 
             Business business1 = new Business(category, "RAF", company, List.of(user));
             Business business2 = new Business(category, "CET", company, List.of(user));

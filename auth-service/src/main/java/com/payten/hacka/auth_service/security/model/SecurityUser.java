@@ -17,14 +17,12 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getPermissions().stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        return null;
     }
 
     public String getRole(){ return user.getRole();}
 
-    public List<Long> getOrganizations(){ return user.getOrganizations(); }
+    public String getCompany(){ return user.getCompany(); }
 
     @Override
     public String getPassword() {

@@ -31,7 +31,8 @@ public class JwtUtils {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
         Claims claims = Jwts.claims().setSubject(userPrincipal.getUsername());
-        claims.put("permissions", authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+        if(userPrincipal.getCompany() != null)
+            claims.put("company", userPrincipal.getCompany());
         claims.put("role", userPrincipal.getRole());
 
         return Jwts.builder()
@@ -49,7 +50,7 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody();
 
-        return ((List<?>) claims.get("permissions")).stream()
+        return ((List<?>) claims.get("role")).stream()
                 .map(authority -> new SimpleGrantedAuthority((String) authority))
                 .collect(Collectors.toList());
     }

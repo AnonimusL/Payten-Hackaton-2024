@@ -14,16 +14,12 @@ import java.util.List;
 @Getter
 @Setter
 public class Company extends BaseEntity{
+    @Column(unique = true)
     private String name;
     @ManyToOne
     private Address mainAddress;
     @OneToMany(mappedBy = "company")
     private List<Business> businesses;
-    @ManyToMany
-    @JoinTable(
-            name = "company_manager",
-            joinColumns = @JoinColumn(name="company_id"),
-            inverseJoinColumns = @JoinColumn(name="manager_id")
-    )
+    @OneToMany
     private List<User> managers;
 }
