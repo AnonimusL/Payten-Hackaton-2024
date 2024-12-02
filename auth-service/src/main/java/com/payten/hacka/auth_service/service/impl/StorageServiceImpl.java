@@ -2,6 +2,7 @@ package com.payten.hacka.auth_service.service.impl;
 
 import com.payten.hacka.auth_service.domain.Address;
 import com.payten.hacka.auth_service.dto.AddressDto;
+import com.payten.hacka.auth_service.dto.StorageAddressDto;
 import com.payten.hacka.auth_service.repository.AddressRepository;
 import com.payten.hacka.auth_service.service.StorageService;
 import jakarta.transaction.Transactional;
@@ -18,11 +19,12 @@ import java.util.stream.Collectors;
 public class StorageServiceImpl implements StorageService {
     private AddressRepository addressRepository;
     private ModelMapper modelMapper;
+
     @Override
-    public List<AddressDto> findAllStorageAddresses() {
+    public List<StorageAddressDto> findAllStorageAddresses() {
         List<Address> addresses = addressRepository.findAllByStorageTrue();
         return addresses.stream()
-                .map(address -> modelMapper.map(address, AddressDto.class))
+                .map(address -> modelMapper.map(address, StorageAddressDto.class))
                 .collect(Collectors.toList());
     }
 

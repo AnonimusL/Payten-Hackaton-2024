@@ -53,8 +53,8 @@ public class SecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**", "/webjars/swagger-ui/**").permitAll()
                 .requestMatchers("/user/register/**").permitAll()
-                .requestMatchers("/company/business").hasRole("COMPANY_MANAGER")
-                .anyRequest().authenticated()
+                //.requestMatchers("/company/business").hasRole("COMPANY_MANAGER")
+                .anyRequest().permitAll()
         );
 
 
