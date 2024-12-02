@@ -3,17 +3,20 @@ package com.payten.hacka.rent_service.service.impl;
 import com.payten.hacka.rent_service.domain.Product;
 import com.payten.hacka.rent_service.domain.ProductCategory;
 import com.payten.hacka.rent_service.domain.RentalUnit;
+import com.payten.hacka.rent_service.domain.Reservation;
 import com.payten.hacka.rent_service.dto.*;
 import com.payten.hacka.rent_service.exceptions.NotFoundException;
 import com.payten.hacka.rent_service.repository.ProductCategoryRepository;
 import com.payten.hacka.rent_service.repository.ProductRepository;
 import com.payten.hacka.rent_service.repository.RentalUnitRepository;
+import com.payten.hacka.rent_service.repository.ReservationRepository;
 import com.payten.hacka.rent_service.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     private RentalUnitRepository rentalUnitRepository;
     private ProductCategoryRepository productCategoryRepository;
+    private ReservationRepository reservationRepository;
     private ModelMapper modelMapper;
     @Override
     public ProductDetailDto createProduct(CreateProductDto createProductDto) {
@@ -131,5 +135,28 @@ public class ProductServiceImpl implements ProductService {
                 buildHierarchy(dependent, categoryDto.getDependentCategories(), categoryMap, level + 1);
             }
         }
+    }
+
+    public List<ProductCategoryDto> getAvailableProducts(UUID productId, LocalDateTime startDate, LocalDateTime endDate) {
+        Product product = productRepository.findById(productId).orElseThrow(()->new NotFoundException("product not found"));
+
+        List<ProductCategory> productCategories = productCategoryRepository.findByProduct(product);
+        List<Reservation> reservations = reservationRepository.findReservationsForProductCategoriesWithinDateRange(productCategories, startDate, endDate);
+
+        Map<UUID, ProductCategoryDto> availableProductsMap = productCategories.stream()
+                .map(productCategory -> {
+                    ProductCategoryDto dto = modelMapper.map(productCategory, ProductCategoryDto.class);
+                    dto.setAvailable(productCategory.getAmount());
+                    return dto;
+                })
+                .collect(Collectors.toMap(ProductCategoryDto::getId, dto -> dto));
+
+        for(Reservation reservation : reservations){
+            availableProductsMap.get(reservation.getProduct()).setAvailable(availableProductsMap.get(reservation.getProduct()).getAvailable()-reservation.getProductAmount());
+            availableProductsMap.get(reservation.getProduct()).setInUse(availableProductsMap.get(reservation.getProduct()).getInUse()+reservation.getProductAmount());
+        }
+
+        // Return the list of available products
+        return availableProductsMap.values().stream().toList();
     }
 }

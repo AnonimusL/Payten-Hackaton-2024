@@ -68,36 +68,19 @@ public class ReservationServiceImpl implements ReservationService {
     }
     @Override
     public Boolean cancelReservation(UUID reservationId) {
-
-        return null;
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()->new NotFoundException(String.format("reservation with id: %s not found", reservationId)));
+        reservation.setCancelled(true);
+        reservation.setDeletedAt(LocalDateTime.now());
+        reservationRepository.save(reservation);
+        return true;
     }
 
     @Override
     public ReservationDto completeReservation(UUID reservationId) {
+
         return null;
     }
 
-    public List<ProductCategoryDto> getAvailableProducts(UUID productId, LocalDateTime startDate, LocalDateTime endDate) {
-        Product product = productRepository.findById(productId).orElseThrow(()->new NotFoundException("product not found"));
 
-        List<ProductCategory> productCategories = productCategoryRepository.findByProduct(product);
-        List<Reservation> reservations = reservationRepository.findReservationsForProductCategoriesWithinDateRange(productCategories, startDate, endDate);
-
-        Map<UUID, ProductCategoryDto> availableProductsMap = productCategories.stream()
-                .map(productCategory -> {
-                    ProductCategoryDto dto = modelMapper.map(productCategory, ProductCategoryDto.class);
-                    dto.setAvailable(productCategory.getAmount());
-                    return dto;
-                })
-                .collect(Collectors.toMap(ProductCategoryDto::getId, dto -> dto));
-
-        for(Reservation reservation : reservations){
-            availableProductsMap.get(reservation.getProduct()).setAvailable(availableProductsMap.get(reservation.getProduct()).getAvailable()-reservation.getProductAmount());
-            availableProductsMap.get(reservation.getProduct()).setInUse(availableProductsMap.get(reservation.getProduct()).getInUse()+reservation.getProductAmount());
-        }
-
-        // Return the list of available products
-        return availableProductsMap.values().stream().toList();
-    }
 
 }
