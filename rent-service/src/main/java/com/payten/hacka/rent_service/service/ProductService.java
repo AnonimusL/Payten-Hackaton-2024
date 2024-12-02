@@ -13,4 +13,6 @@ public interface ProductService {
     ProductDetailDto addProductInstance(UUID productId, ProductInstanceDto productInstanceDto);
     ProductDetailDto getProductInfo(UUID productId);
     List<ProductDto> findAll();
+
+    List<ProductDto> findAllByLocation(UUID locationId);
 }
