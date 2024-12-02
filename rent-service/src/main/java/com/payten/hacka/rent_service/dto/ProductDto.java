@@ -18,7 +18,4 @@ public class ProductDto {
     private String category;
     private UUID businessId;
     private UUID addressId;
-    private int available;
-
-    private List<RentalUnitDto> rentalUnits;
 }

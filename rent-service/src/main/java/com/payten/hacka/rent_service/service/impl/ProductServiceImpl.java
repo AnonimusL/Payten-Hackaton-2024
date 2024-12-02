@@ -2,12 +2,10 @@ package com.payten.hacka.rent_service.service.impl;
 
 import com.payten.hacka.rent_service.domain.Product;
 import com.payten.hacka.rent_service.domain.ProductCategory;
-import com.payten.hacka.rent_service.domain.ProductInstance;
 import com.payten.hacka.rent_service.domain.RentalUnit;
 import com.payten.hacka.rent_service.dto.*;
 import com.payten.hacka.rent_service.exceptions.NotFoundException;
 import com.payten.hacka.rent_service.repository.ProductCategoryRepository;
-import com.payten.hacka.rent_service.repository.ProductInstanceRepository;
 import com.payten.hacka.rent_service.repository.ProductRepository;
 import com.payten.hacka.rent_service.repository.RentalUnitRepository;
 import com.payten.hacka.rent_service.service.ProductService;
@@ -16,8 +14,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +22,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
-    private ProductInstanceRepository productInstanceRepository;
     private RentalUnitRepository rentalUnitRepository;
     private ProductCategoryRepository productCategoryRepository;
     private ModelMapper modelMapper;
@@ -45,43 +41,39 @@ public class ProductServiceImpl implements ProductService {
 
         final Product fProduct = productRepository.save(product);
 
-        List<ProductInstance> productInstances = createProductDto.getProductInstances().stream()
-                .map(productInstance -> modelMapper.map(productInstance, ProductInstance.class))
-                .peek(productInstance -> productInstance.setProduct(fProduct))
-                .collect(Collectors.toList());
-        productInstances = productInstanceRepository.saveAll(productInstances);
         ProductDetailDto productDetailDto = modelMapper.map(product, ProductDetailDto.class);
-        productDetailDto.setProductInstances(productInstances.stream().map(productInstance -> modelMapper.map(productInstance, ProductInstanceDto.class)).collect(Collectors.toList()));
         productDetailDto.setRentalUnits(rentalUnits.stream().map(rentalUnit -> modelMapper.map(rentalUnit, RentalUnitDto.class)).collect(Collectors.toList()));
-        productDetailDto.setProductSupportedCategories(productCategories.stream().map(productCategory -> modelMapper.map(productCategory, ProductCategoryDto.class)).collect(Collectors.toList()));
-        return productDetailDto;
-    }
-
-    @Override
-    public ProductDetailDto addProductInstance(UUID productId, ProductInstanceDto productInstanceDto) {
-        Product product = productRepository.findById(productId).orElseThrow(()->new NotFoundException(String.format("Product with id: %s not found", productId)));
-        ProductInstance productInstance = modelMapper.map(productInstanceDto, ProductInstance.class);
-        productInstance.setProduct(product);
-        List<ProductInstance> productInstances = productInstanceRepository.findAllByProduct(product);
-        productInstance = productInstanceRepository.save(productInstance);
-        productInstances.add(productInstance);
-
-        ProductDetailDto productDetailDto = modelMapper.map(product, ProductDetailDto.class);
-        productDetailDto.setProductInstances(productInstances.stream().map(productInst -> modelMapper.map(productInst, ProductInstanceDto.class)).collect(Collectors.toList()));
-        productDetailDto.setRentalUnits(product.getRentalUnits().stream().map(rentalUnit -> modelMapper.map(rentalUnit, RentalUnitDto.class)).collect(Collectors.toList()));
-
         return productDetailDto;
     }
 
     @Override
     public ProductDetailDto getProductInfo(UUID productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException(String.format("product with id: %s not found", productId)));
-        List<ProductInstance> productInstances = productInstanceRepository.findAllByProduct(product);
         ProductDetailDto productDetailDto = modelMapper.map(product, ProductDetailDto.class);
         productDetailDto.setRentalUnits(product.getRentalUnits().stream().map(rentalUnit -> modelMapper.map(rentalUnit, RentalUnitDto.class))
                 .collect(Collectors.toList()));
-        productDetailDto.setProductInstances(productInstances.stream().map(productInstance -> modelMapper.map(productInstance, ProductInstanceDto.class))
-                .collect(Collectors.toList()));
+
+        /**
+        List<ProductCategory> productCategories = productCategoryRepository.findByProduct(product);
+        Map<String, List<ProductCategoryDto>> categoryMap = new HashMap<>();
+        for(ProductCategory pc : productCategories){
+            ProductCategoryDto pcd = modelMapper.map(pc, ProductCategoryDto.class);
+            categoryMap.put(pcd.getName(), new ArrayList<>());
+
+            if(pc.getDependentCategories()==null) continue;
+
+            ProductCategoryDto pcDepend = modelMapper.map(pc.getDependentCategories(), ProductCategoryDto.class);
+
+            if(!categoryMap.containsKey(pcDepend.getName())) {
+                categoryMap.put(pcDepend.getName(), new ArrayList<>());
+            }
+
+            categoryMap.get(pcDepend.getName()).add(pcd);
+        }
+         */
+
+        productDetailDto.setCategories(getCategoryHierarchy(product));
+
         return productDetailDto;
     }
 
@@ -97,5 +89,47 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAllByAddressId(locationId).stream()
                 .map(product -> modelMapper.map(product, ProductDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public List<ProductCategoryDto> getCategoryHierarchy(Product product) {
+        List<ProductCategory> categories = productCategoryRepository.findByProduct(product);
+        Map<UUID, ProductCategory> categoryMap = categories.stream()
+                .collect(Collectors.toMap(ProductCategory::getId, c -> c));
+
+        // Separate root categories (no parent)
+        List<ProductCategory> rootCategories = categories.stream()
+                .filter(c -> c.getParentCategory() == null)
+                .collect(Collectors.toList());
+
+        // Recursively build the hierarchy with level numbers
+        List<ProductCategoryDto> hierarchy = new ArrayList<>();
+        for (ProductCategory root : rootCategories) {
+            buildHierarchy(root, hierarchy, categoryMap, 1); // Start with level 1 for root categories
+        }
+        return hierarchy;
+    }
+
+    private void buildHierarchy(ProductCategory category, List<ProductCategoryDto> hierarchy,
+                                Map<UUID, ProductCategory> categoryMap, int level) {
+        // Create DTO for the category with its level
+        ProductCategoryDto categoryDto = new ProductCategoryDto(
+                category.getId(),
+                category.getName(),
+                category.getCatValue(),
+                category.getAvailable(),
+                category.getInUse(),
+                category.getAmount(),
+                level,
+                new ArrayList<>()
+        );
+
+        hierarchy.add(categoryDto);
+
+        // Recursively build the dependents with incremented level
+        if (category.getDependentCategories() != null) {
+            for (ProductCategory dependent : category.getDependentCategories()) {
+                buildHierarchy(dependent, categoryDto.getDependentCategories(), categoryMap, level + 1);
+            }
+        }
     }
 }

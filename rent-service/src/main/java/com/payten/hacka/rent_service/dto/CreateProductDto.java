@@ -1,10 +1,5 @@
 package com.payten.hacka.rent_service.dto;
 
-import com.payten.hacka.rent_service.domain.ProductInstance;
-import com.payten.hacka.rent_service.domain.RentalUnit;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +20,5 @@ public class CreateProductDto {
     private int available;
 
     private List<RentalUnitDto> rentalUnits;
-    private List<ProductInstanceDto> productInstances;
     private List<ProductCategoryDto> productSupportedCategories;
 }

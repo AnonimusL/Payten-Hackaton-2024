@@ -27,6 +27,6 @@ public class RentalUnit {
     private String unitName; // "hour", "day", "week", "custom-unit"
     @NotNull
     private BigDecimal pricePerUnit;
-    @ManyToMany(mappedBy = "rentalUnits")
-    private List<Product> products;
+    @ManyToOne
+    private Product product;
 }

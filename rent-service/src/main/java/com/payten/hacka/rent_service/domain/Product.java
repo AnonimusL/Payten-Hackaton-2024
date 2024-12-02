@@ -21,22 +21,11 @@ public class Product {
     private String category;
     private UUID businessId;
     private UUID addressId;
-    private int available;
-    private int inUse;
+    private int amount;
     private int maxNumForRent;
     private boolean deleted;
-    @ManyToMany
-    @JoinTable(
-            name = "product_rental_units",
-            joinColumns = @JoinColumn(name="product_id"),
-            inverseJoinColumns = @JoinColumn(name="rental_unit_id")
-    )
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RentalUnit> rentalUnits;
-    @OneToMany
-    @JoinTable(
-            name = "product_categories",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductCategory> productSupportedCategories;
 }

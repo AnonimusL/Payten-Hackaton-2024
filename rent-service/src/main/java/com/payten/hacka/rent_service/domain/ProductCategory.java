@@ -1,13 +1,13 @@
 package com.payten.hacka.rent_service.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -19,6 +19,40 @@ import java.util.UUID;
 public class ProductCategory {
     @Id
     private UUID id;
+    @ManyToOne
+    private Product product;
     private String name;
     private String catValue;
+    private int amount;
+    private int inUse;
+    private int available;
+    @ManyToOne
+    @JoinColumn(name = "parent_category_id", nullable = true)
+    private ProductCategory parentCategory;
+    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductCategory> dependentCategories;
+
+    public ProductCategory(UUID id, Product product, String name, String catValue, int amount, int inUse, int available, ProductCategory parentCategory) {
+        this.id = id;
+        this.product = product;
+        this.name = name;
+        this.catValue = catValue;
+        this.amount = amount;
+        this.inUse = inUse;
+        this.available = available;
+        this.parentCategory = parentCategory;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductCategory that = (ProductCategory) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

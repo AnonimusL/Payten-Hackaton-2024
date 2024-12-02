@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**", "/webjars/swagger-ui/**").permitAll()
                 .requestMatchers("/user/register/**").permitAll()
                 .requestMatchers("/company/business").hasRole("COMPANY_MANAGER")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
         );
 
 
