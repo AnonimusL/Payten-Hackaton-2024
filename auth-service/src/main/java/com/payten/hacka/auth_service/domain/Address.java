@@ -17,6 +17,7 @@ import java.util.List;
 @Setter
 public class Address extends BaseEntity {
     private String country;
+    private String countryEn;
     private String city;
     private String postcode;
     private String street;

@@ -15,6 +15,7 @@ import java.util.List;
 public class BusinessDetailDto {
     private Category category;
     private String name;
+    private String nameEn;
     private CompanyDto company;
     private List<UserDto> managers;
     private List<AddressDto> addresses;

@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 public class CreateCompanyDto {
     private String name;
+    private String nameEn;
     private AddressDto mainAddress;
     private UserDto manager;
 

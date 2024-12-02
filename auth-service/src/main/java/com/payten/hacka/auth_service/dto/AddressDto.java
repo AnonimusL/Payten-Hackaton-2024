@@ -15,6 +15,7 @@ import java.util.UUID;
 public class AddressDto {
     private UUID id;
     private String country;
+    private String countryEn;
     private String city;
     private String postcode;
     private String street;

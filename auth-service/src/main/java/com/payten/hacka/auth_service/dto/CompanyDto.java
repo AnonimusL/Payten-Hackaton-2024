@@ -13,5 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class CompanyDto {
     private String name;
+    private String nameEn;
     private AddressDto address;
 }

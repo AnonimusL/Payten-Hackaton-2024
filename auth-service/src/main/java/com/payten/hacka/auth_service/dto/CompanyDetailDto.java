@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 public class CompanyDetailDto {
     private String name;
+    private String nameEn;
     private List<UserDto> managers;
     private AddressDto address;
     private List<CompanyBusinessDto> businesses;

@@ -25,6 +25,7 @@ public class Business extends BaseEntity {
     @ManyToOne
     private Category category;
     private String name;
+    private String nameEn;
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;

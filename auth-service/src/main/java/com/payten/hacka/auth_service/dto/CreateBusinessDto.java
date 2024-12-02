@@ -25,8 +25,10 @@ import java.util.UUID;
 public class CreateBusinessDto {
     @NotBlank
     private String category;
+    private String categoryEn;
     @NotBlank
     private String name;
+    private String nameEn;
     @NotBlank
     private UUID company;
     private List<UUID> managers;

@@ -16,6 +16,7 @@ import java.util.List;
 public class Company extends BaseEntity{
     @Column(unique = true)
     private String name;
+    private String nameEn;
     @ManyToOne
     private Address mainAddress;
     @OneToMany(mappedBy = "company")
