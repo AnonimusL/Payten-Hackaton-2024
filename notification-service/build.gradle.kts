@@ -46,3 +46,14 @@ dependencies {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+// Configure the JAR task to build an executable JAR
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+	enabled = true
+	archiveFileName.set("${project.name}-${project.version}.jar")
+}
+
+// Disable the standard JAR task since BootJar is used
+tasks.named<Jar>("jar") {
+	enabled = false
+}
