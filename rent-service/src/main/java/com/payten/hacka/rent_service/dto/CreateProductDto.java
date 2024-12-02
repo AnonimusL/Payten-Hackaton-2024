@@ -25,5 +25,6 @@ public class CreateProductDto {
     private int available;
 
     private List<RentalUnitDto> rentalUnits;
-    private List<ProductInstance> productInstances;
+    private List<ProductInstanceDto> productInstances;
+    private List<ProductCategoryDto> productSupportedCategories;
 }

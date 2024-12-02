@@ -23,6 +23,7 @@ public class Product {
     private UUID addressId;
     private int available;
     private int inUse;
+    private int maxNumForRent;
     private boolean deleted;
     @ManyToMany
     @JoinTable(
@@ -31,4 +32,11 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name="rental_unit_id")
     )
     private List<RentalUnit> rentalUnits;
+    @OneToMany
+    @JoinTable(
+            name = "product_categories",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<ProductCategory> productSupportedCategories;
 }

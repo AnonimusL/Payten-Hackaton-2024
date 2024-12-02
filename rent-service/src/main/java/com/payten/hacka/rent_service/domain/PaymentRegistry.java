@@ -3,7 +3,7 @@ package com.payten.hacka.rent_service.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,24 +15,21 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Reservation {
+@Getter
+@Setter
+public class PaymentRegistry {
     @Id
     private UUID id;
-    @ManyToOne
-    private Product product;
-    @ManyToOne
-    private RentalUnit rentalUnit;
+    @OneToOne
+    private Reservation reservation;
+    private Double total;
+    private LocalDateTime activityFrom;
+    private LocalDateTime activityTo;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-    @Column(nullable = true)
-    private LocalDateTime deletedAt;
-    private boolean completed;
-    private boolean cancelled;
 }

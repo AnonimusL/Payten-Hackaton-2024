@@ -22,4 +22,5 @@ public class ProductDetailDto {
 
     private List<RentalUnitDto> rentalUnits;
     private List<ProductInstanceDto> productInstances;
+    private List<ProductCategoryDto> productSupportedCategories;
 }

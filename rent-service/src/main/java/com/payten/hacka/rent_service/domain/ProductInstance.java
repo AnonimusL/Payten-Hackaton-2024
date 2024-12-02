@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,4 +21,11 @@ public class ProductInstance {
     private Product product;
     private String label;
     private int amount;
+    @OneToMany
+    @JoinTable(
+            name = "product_instance_categories",
+            joinColumns = @JoinColumn(name = "product_instance_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_category_id")
+    )
+    private List<ProductCategory> productCategories;
 }

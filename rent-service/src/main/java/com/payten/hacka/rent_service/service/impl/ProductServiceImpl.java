@@ -1,10 +1,12 @@
 package com.payten.hacka.rent_service.service.impl;
 
 import com.payten.hacka.rent_service.domain.Product;
+import com.payten.hacka.rent_service.domain.ProductCategory;
 import com.payten.hacka.rent_service.domain.ProductInstance;
 import com.payten.hacka.rent_service.domain.RentalUnit;
 import com.payten.hacka.rent_service.dto.*;
 import com.payten.hacka.rent_service.exceptions.NotFoundException;
+import com.payten.hacka.rent_service.repository.ProductCategoryRepository;
 import com.payten.hacka.rent_service.repository.ProductInstanceRepository;
 import com.payten.hacka.rent_service.repository.ProductRepository;
 import com.payten.hacka.rent_service.repository.RentalUnitRepository;
@@ -25,6 +27,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     private ProductInstanceRepository productInstanceRepository;
     private RentalUnitRepository rentalUnitRepository;
+    private ProductCategoryRepository productCategoryRepository;
     private ModelMapper modelMapper;
     @Override
     public ProductDetailDto createProduct(CreateProductDto createProductDto) {
@@ -32,7 +35,16 @@ public class ProductServiceImpl implements ProductService {
         List<RentalUnit> rentalUnits = createProductDto.getRentalUnits().stream().map(rentalUnitDto -> modelMapper.map(rentalUnitDto, RentalUnit.class)).collect(Collectors.toList());
         rentalUnits = rentalUnitRepository.saveAll(rentalUnits);
         product.setRentalUnits(rentalUnits);
+
+        List<ProductCategory> productCategories = createProductDto.getProductSupportedCategories().stream()
+                .map(productCategoryDto -> modelMapper.map(productCategoryDto, ProductCategory.class))
+                .collect(Collectors.toList());
+
+        productCategories = productCategoryRepository.saveAll(productCategories);
+        product.setProductSupportedCategories(productCategories);
+
         final Product fProduct = productRepository.save(product);
+
         List<ProductInstance> productInstances = createProductDto.getProductInstances().stream()
                 .map(productInstance -> modelMapper.map(productInstance, ProductInstance.class))
                 .peek(productInstance -> productInstance.setProduct(fProduct))
@@ -41,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
         ProductDetailDto productDetailDto = modelMapper.map(product, ProductDetailDto.class);
         productDetailDto.setProductInstances(productInstances.stream().map(productInstance -> modelMapper.map(productInstance, ProductInstanceDto.class)).collect(Collectors.toList()));
         productDetailDto.setRentalUnits(rentalUnits.stream().map(rentalUnit -> modelMapper.map(rentalUnit, RentalUnitDto.class)).collect(Collectors.toList()));
-
+        productDetailDto.setProductSupportedCategories(productCategories.stream().map(productCategory -> modelMapper.map(productCategory, ProductCategoryDto.class)).collect(Collectors.toList()));
         return productDetailDto;
     }
 
