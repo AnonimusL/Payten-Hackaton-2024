@@ -24,22 +24,18 @@ public class ProductCategory {
     private String name;
     private String catValue;
     private int amount;
-    private int inUse;
-    private int available;
     @ManyToOne
     @JoinColumn(name = "parent_category_id", nullable = true)
     private ProductCategory parentCategory;
     @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductCategory> dependentCategories;
 
-    public ProductCategory(UUID id, Product product, String name, String catValue, int amount, int inUse, int available, ProductCategory parentCategory) {
+    public ProductCategory(UUID id, Product product, String name, String catValue, int amount, ProductCategory parentCategory) {
         this.id = id;
         this.product = product;
         this.name = name;
         this.catValue = catValue;
         this.amount = amount;
-        this.inUse = inUse;
-        this.available = available;
         this.parentCategory = parentCategory;
     }
 

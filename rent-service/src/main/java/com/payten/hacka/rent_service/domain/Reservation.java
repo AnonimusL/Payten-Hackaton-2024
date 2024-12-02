@@ -1,5 +1,6 @@
 package com.payten.hacka.rent_service.domain;
 
+import com.payten.hacka.rent_service.dto.ProductCategoryDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -23,9 +24,13 @@ public class Reservation {
     @Id
     private UUID id;
     @ManyToOne
-    private Product product;
+    private ProductCategory product;
     @ManyToOne
     private RentalUnit rentalUnit;
+    private int amount;
+    private int productAmount;
+    private LocalDateTime activityFrom;
+    private LocalDateTime activityTo;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -33,6 +38,7 @@ public class Reservation {
     private LocalDateTime updatedAt;
     @Column(nullable = true)
     private LocalDateTime deletedAt;
+    private LocalDateTime reservationTime;
     private boolean completed;
     private boolean cancelled;
 }

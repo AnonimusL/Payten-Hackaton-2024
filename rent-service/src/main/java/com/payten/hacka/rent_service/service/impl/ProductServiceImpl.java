@@ -116,8 +116,8 @@ public class ProductServiceImpl implements ProductService {
                 category.getId(),
                 category.getName(),
                 category.getCatValue(),
-                category.getAvailable(),
-                category.getInUse(),
+                category.getAmount(),
+                0,
                 category.getAmount(),
                 level,
                 new ArrayList<>()

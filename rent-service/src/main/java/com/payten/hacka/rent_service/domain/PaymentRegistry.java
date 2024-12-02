@@ -25,8 +25,6 @@ public class PaymentRegistry {
     @OneToOne
     private Reservation reservation;
     private Double total;
-    private LocalDateTime activityFrom;
-    private LocalDateTime activityTo;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;

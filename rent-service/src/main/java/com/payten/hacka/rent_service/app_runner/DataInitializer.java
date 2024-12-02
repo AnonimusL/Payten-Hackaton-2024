@@ -5,7 +5,6 @@ import com.payten.hacka.rent_service.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,8 +61,6 @@ public class DataInitializer implements CommandLineRunner {
                 "Gender",
                 "Men",
                 20,
-                0,
-                20,
                 null
         );
 
@@ -72,8 +69,6 @@ public class DataInitializer implements CommandLineRunner {
                 skates,
                 "Gender",
                 "Women",
-                15,
-                0,
                 15,
                 null
         );
@@ -84,8 +79,6 @@ public class DataInitializer implements CommandLineRunner {
                 "Size",
                 "43",
                 10,
-                0,
-                10,
                 men
         );
 
@@ -95,38 +88,9 @@ public class DataInitializer implements CommandLineRunner {
                 "Size",
                 "38",
                 5,
-                0,
-                5,
                 women
         );
         productCategoryRepository.saveAll(List.of(men, women, size43, size38));
-
-        // Reservations
-        Reservation reservation = new Reservation(
-                UUID.randomUUID(),
-                skates,
-                daily,
-                LocalDateTime.now(),
-                null,
-                null,
-                false,
-                false
-        );
-
-        reservationRepository.save(reservation);
-
-        // Payment Registry
-        PaymentRegistry paymentRegistry = new PaymentRegistry(
-                UUID.randomUUID(),
-                reservation,
-                50.00,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(2),
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
-
-        paymentRegistryRepository.save(paymentRegistry);
 
         System.out.println("Data Initialized Successfully");
     }
