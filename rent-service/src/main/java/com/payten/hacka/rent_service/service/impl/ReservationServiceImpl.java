@@ -68,12 +68,16 @@ public class ReservationServiceImpl implements ReservationService {
     }
     @Override
     public Boolean cancelReservation(UUID reservationId) {
-
-        return null;
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()->new NotFoundException(String.format("reservation with id: %s not found", reservationId)));
+        reservation.setCancelled(true);
+        reservation.setDeletedAt(LocalDateTime.now());
+        reservationRepository.save(reservation);
+        return true;
     }
 
     @Override
     public ReservationDto completeReservation(UUID reservationId) {
+
         return null;
     }
 
