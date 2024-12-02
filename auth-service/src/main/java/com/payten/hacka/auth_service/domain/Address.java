@@ -21,6 +21,8 @@ public class Address extends BaseEntity {
     private String postcode;
     private String street;
     private String number;
+    private Double longitude;
+    private Double latitude;
     private boolean storage;
     @ManyToMany(mappedBy = "addresses")
     private List<Business> businesses;

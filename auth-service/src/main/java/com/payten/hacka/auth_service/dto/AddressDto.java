@@ -19,4 +19,6 @@ public class AddressDto {
     private String postcode;
     private String street;
     private String number;
+    private Double longitude;
+    private Double latitude;
 }
