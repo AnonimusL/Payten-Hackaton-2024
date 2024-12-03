@@ -18,7 +18,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
@@ -31,4 +30,12 @@ public class BaseEntity {
     private LocalDateTime updatedAt;
     @Column(nullable = true)
     private LocalDateTime deletedAt;
+
+    @PrePersist
+    public void ensureId() {
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
+    }
+
 }
