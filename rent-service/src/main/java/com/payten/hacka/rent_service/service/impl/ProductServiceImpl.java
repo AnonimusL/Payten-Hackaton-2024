@@ -142,9 +142,9 @@ public class ProductServiceImpl implements ProductService {
                 category.getName(),
                 category.getNameEn(),
                 category.getCatValue(),
-                category.getAmount(),
+                category.getProductAmount(),
                 0,
-                category.getAmount(),
+                category.getProductAmount(),
                 level,
                 new ArrayList<>()
         );
@@ -168,14 +168,14 @@ public class ProductServiceImpl implements ProductService {
         Map<UUID, ProductCategoryDto> availableProductsMap = productCategories.stream()
                 .map(productCategory -> {
                     ProductCategoryDto dto = modelMapper.map(productCategory, ProductCategoryDto.class);
-                    dto.setAvailable(productCategory.getAmount());
+                    dto.setAvailable(productCategory.getProductAmount());
                     return dto;
                 })
                 .collect(Collectors.toMap(ProductCategoryDto::getId, dto -> dto));
 
         for(Reservation reservation : reservations){
-            availableProductsMap.get(reservation.getProduct()).setAvailable(availableProductsMap.get(reservation.getProduct()).getAvailable()-reservation.getProductAmount());
-            availableProductsMap.get(reservation.getProduct()).setInUse(availableProductsMap.get(reservation.getProduct()).getInUse()+reservation.getProductAmount());
+            availableProductsMap.get(reservation.getProduct()).setAvailable(availableProductsMap.get(reservation.getProduct()).getAvailable()-reservation.getProdAmount());
+            availableProductsMap.get(reservation.getProduct()).setInUse(availableProductsMap.get(reservation.getProduct()).getInUse()+reservation.getProdAmount());
         }
 
         // Return the list of available products

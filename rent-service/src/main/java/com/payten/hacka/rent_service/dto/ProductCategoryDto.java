@@ -18,7 +18,7 @@ public class ProductCategoryDto {
     private String name;
     private String nameEn;
     private String catValue;
-    private int amount;
+    private int productAmount;
     private int inUse;
     private int available;
     private int level;

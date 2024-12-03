@@ -16,6 +16,6 @@ public class CreateReservationDto {
     private UUID product;
     private UUID rentalUnit;
     private int rentalAmount;
-    private int productAmount;
+    private int prodAmount;
     private LocalDateTime reservedFrom;
 }

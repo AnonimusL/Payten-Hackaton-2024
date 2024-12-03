@@ -25,7 +25,7 @@ public class Product {
     private UUID addressId;
     @Lob
     private byte[] photo;
-    private int productAmount;
+    private int amount;
     private int maxNumForRent;
     private boolean deleted;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)

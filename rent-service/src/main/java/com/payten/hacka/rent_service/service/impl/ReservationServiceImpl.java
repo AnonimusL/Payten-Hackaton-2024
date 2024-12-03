@@ -1,12 +1,9 @@
 package com.payten.hacka.rent_service.service.impl;
 
-import com.payten.hacka.rent_service.domain.Product;
 import com.payten.hacka.rent_service.domain.ProductCategory;
 import com.payten.hacka.rent_service.domain.RentalUnit;
 import com.payten.hacka.rent_service.domain.Reservation;
 import com.payten.hacka.rent_service.dto.CreateReservationDto;
-import com.payten.hacka.rent_service.dto.ProductCategoryDto;
-import com.payten.hacka.rent_service.dto.ProductDto;
 import com.payten.hacka.rent_service.dto.ReservationDto;
 import com.payten.hacka.rent_service.exceptions.NotFoundException;
 import com.payten.hacka.rent_service.repository.ProductCategoryRepository;
@@ -14,7 +11,6 @@ import com.payten.hacka.rent_service.repository.ProductRepository;
 import com.payten.hacka.rent_service.repository.RentalUnitRepository;
 import com.payten.hacka.rent_service.repository.ReservationRepository;
 import com.payten.hacka.rent_service.service.ReservationService;
-import com.payten.hacka.rent_service.service.rmq.RMQConfig;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -22,10 +18,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -43,7 +36,7 @@ public class ReservationServiceImpl implements ReservationService {
         RentalUnit rentalUnit = rentalUnitRepository.findById(createReservationDto.getRentalUnit()).orElseThrow(()-> new NotFoundException(String.format("rental unit not found")));
         ProductCategory productCategory = productCategoryRepository.findById(createReservationDto.getProduct()).orElseThrow(() -> new NotFoundException("product instance not found"));
 
-        if(productAvailability(productCategory.getId(), createReservationDto.getReservedFrom(), calculateEndDateTime(createReservationDto.getReservedFrom(), rentalUnit, createReservationDto.getProductAmount())) < productCategory.getProduct().getMaxNumForRent()){
+        if(productAvailability(productCategory.getId(), createReservationDto.getReservedFrom(), calculateEndDateTime(createReservationDto.getReservedFrom(), rentalUnit, createReservationDto.getProdAmount())) < productCategory.getProduct().getMaxNumForRent()){
             Reservation reservation = modelMapper.map(createReservationDto, Reservation.class);
             reservation = reservationRepository.save(reservation);
             sendEmail();

@@ -25,7 +25,7 @@ public class Reservation {
     @ManyToOne
     private RentalUnit rentalUnit;
     private int rentalAmount;
-    private int productAmount;
+    private int prodAmount;
     private LocalDateTime activityFrom;
     private LocalDateTime activityTo;
     @CreationTimestamp

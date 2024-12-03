@@ -19,7 +19,7 @@ public class CreateProductDto {
     private String categoryEn;
     private UUID businessId;
     private UUID addressId;
-    private int available;
+    private int amount;
 
     private List<RentalUnitDto> rentalUnits;
     private List<ProductCategoryDto> productSupportedCategories;

@@ -24,7 +24,7 @@ public class ProductCategory {
     private String name;
     private String nameEn;
     private String catValue;
-    private int amount;
+    private int productAmount;
     @ManyToOne
     @JoinColumn(name = "parent_category_id", nullable = true)
     private ProductCategory parentCategory;
@@ -36,7 +36,7 @@ public class ProductCategory {
         this.product = product;
         this.name = name;
         this.catValue = catValue;
-        this.amount = amount;
+        this.productAmount = amount;
         this.parentCategory = parentCategory;
     }
 

@@ -2,7 +2,6 @@ package com.payten.hacka.rent_service.controller;
 
 import com.payten.hacka.rent_service.dto.*;
 import com.payten.hacka.rent_service.service.ProductService;
-import com.payten.hacka.rent_service.service.ReservationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

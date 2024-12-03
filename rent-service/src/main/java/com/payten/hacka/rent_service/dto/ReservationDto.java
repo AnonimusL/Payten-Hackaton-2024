@@ -17,7 +17,7 @@ public class ReservationDto {
     private ProductCategoryDto product;
     private RentalUnitDto rentalUnit;
     private int rentalAmount;
-    private int productAmount;
+    private int prodAmount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
