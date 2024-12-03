@@ -1,15 +1,9 @@
 package com.payten.hacka.rent_service.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,4 +24,11 @@ public class RentalUnit {
     private BigDecimal pricePerUnit;
     @ManyToOne
     private Product product;
+
+    @PrePersist
+    public void ensureId() {
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
+    }
 }

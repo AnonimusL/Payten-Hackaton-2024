@@ -1,10 +1,7 @@
 package com.payten.hacka.rent_service.domain;
 
 import com.payten.hacka.rent_service.dto.ProductCategoryDto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +24,7 @@ public class Reservation {
     private ProductCategory product;
     @ManyToOne
     private RentalUnit rentalUnit;
-    private int amount;
+    private int rentalAmount;
     private int productAmount;
     private LocalDateTime activityFrom;
     private LocalDateTime activityTo;
@@ -41,4 +38,12 @@ public class Reservation {
     private LocalDateTime reservationTime;
     private boolean completed;
     private boolean cancelled;
+
+    @PrePersist
+    public void ensureId() {
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
+    }
+
 }

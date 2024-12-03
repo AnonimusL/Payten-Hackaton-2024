@@ -15,6 +15,7 @@ import java.util.UUID;
 public class CreateReservationDto {
     private UUID product;
     private UUID rentalUnit;
-    private int amount;
+    private int rentalAmount;
+    private int productAmount;
     private LocalDateTime reservedFrom;
 }

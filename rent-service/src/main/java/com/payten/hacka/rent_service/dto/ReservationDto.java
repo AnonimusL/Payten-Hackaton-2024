@@ -16,7 +16,7 @@ public class ReservationDto {
     private UUID id;
     private ProductCategoryDto product;
     private RentalUnitDto rentalUnit;
-    private int amount;
+    private int rentalAmount;
     private int productAmount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

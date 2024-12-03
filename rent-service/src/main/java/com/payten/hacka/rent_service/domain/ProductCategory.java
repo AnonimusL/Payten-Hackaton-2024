@@ -52,4 +52,11 @@ public class ProductCategory {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @PrePersist
+    public void ensureId() {
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
+    }
 }

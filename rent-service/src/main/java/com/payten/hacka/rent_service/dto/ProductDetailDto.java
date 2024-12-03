@@ -22,7 +22,7 @@ public class ProductDetailDto {
     private String categoryEn;
     private UUID businessId;
     private UUID addressId;
-    private int amount;
+    private int productAmount;
     private int maxNumForRent;
 
     private List<RentalUnitDto> rentalUnits;
