@@ -48,7 +48,7 @@ public class ReservationServiceImpl implements ReservationService {
     private void sendEmail() {
         try {
             String message = createJsonMessage();
-            this.rabbitTemplate.convertAndSend("application_exchange", "rental.rent", message);
+            this.rabbitTemplate.convertAndSend("application_exchange_new", "rental.rent", message);
         } catch (Exception e) {
             throw new RuntimeException("Cannot send mail");
         }

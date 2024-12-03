@@ -28,7 +28,7 @@ public class RMQConsumer {
         this.notificationRepository = notificationRepository;
     }
 
-    @RabbitListener(queues = "application_topic_queue")
+    @RabbitListener(queues = "application_topic_queue_new")
     public void handleMessage(String message, @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String routingKey) {
         switch (routingKey) {
             case "account.reset_password":
