@@ -11,6 +11,7 @@ import com.payten.hacka.rent_service.repository.ProductRepository;
 import com.payten.hacka.rent_service.repository.RentalUnitRepository;
 import com.payten.hacka.rent_service.repository.ReservationRepository;
 import com.payten.hacka.rent_service.service.ProductService;
+import com.payten.hacka.rent_service.utils.PhotoEncoder;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -28,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
     private RentalUnitRepository rentalUnitRepository;
     private ProductCategoryRepository productCategoryRepository;
     private ReservationRepository reservationRepository;
+    private PhotoEncoder photoEncoder;
     private ModelMapper modelMapper;
     @Override
     public ProductDetailDto createProduct(CreateProductDto createProductDto) {
@@ -82,17 +84,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findAll() {
-        return productRepository.findAll().stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
-                .collect(Collectors.toList());
+    public ProductsPerCategoryDto findAll(String categoryName) {
+        List<Product> products;
+        if(categoryName == null){
+            products = productRepository.findAll();
+        }else {
+            products = productRepository.findByCategory(categoryName);
+        }
+
+        return productsPerCategory(products);
+    }
+
+    private ProductsPerCategoryDto productsPerCategory(List<Product> products){
+        Map<String, List<ProductDto>> productMap = new HashMap<>();
+        for(Product product : products){
+            if(product.getCategory() == null) continue;
+            if(!productMap.containsKey(product.getCategory()))
+                productMap.put(product.getCategory(), new ArrayList<>());
+
+            ProductDto productDto = modelMapper.map(product, ProductDto.class);
+            productDto.setEncodedPhoto(photoEncoder.getImageAsBase64(product.getPhoto()));
+            productMap.get(product.getCategory()).add(productDto);
+        }
+
+        return new ProductsPerCategoryDto(productMap);
     }
 
     @Override
-    public List<ProductDto> findAllByLocation(UUID locationId) {
-        return productRepository.findAllByAddressId(locationId).stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
-                .collect(Collectors.toList());
+    public ProductsPerCategoryDto findAllByLocation(UUID locationId) {
+        List<Product> products = productRepository.findAllByAddressId(locationId);
+        return productsPerCategory(products);
     }
 
     public List<ProductCategoryDto> getCategoryHierarchy(Product product) {
@@ -119,6 +140,7 @@ public class ProductServiceImpl implements ProductService {
         ProductCategoryDto categoryDto = new ProductCategoryDto(
                 category.getId(),
                 category.getName(),
+                category.getNameEn(),
                 category.getCatValue(),
                 category.getAmount(),
                 0,

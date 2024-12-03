@@ -4,7 +4,11 @@ import com.payten.hacka.rent_service.domain.*;
 import com.payten.hacka.rent_service.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,37 +35,47 @@ public class DataInitializer implements CommandLineRunner {
         this.paymentRegistryRepository = paymentRegistryRepository;
     }
 
+    private byte[] getImageBytes(String imagePath) throws IOException {
+        File imageFile = new File(imagePath);
+        return Files.readAllBytes(imageFile.toPath());
+    }
+
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws IOException {
+        // Create Product entity
+        byte[] skatesPhoto = getImageBytes("C:\\Users\\mijan\\OneDrive\\Desktop\\payten hackaton 2024\\Payten-Hackaton-2024\\rent-service\\src\\main\\resources\\static\\images\\skates.jpg");
         Product skates = new Product(
-                UUID.randomUUID(),
+                UUID.randomUUID(),  // product id
+                "Klizaljke",
                 "Skates",
+                "Sport",
                 "Sports",
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                30, // available
-                3,  // in use
-                false,
-                null,
-                null
+                UUID.randomUUID(),  // businessId (this would typically be a valid business ID from your DB)
+                UUID.randomUUID(),  // addressId (this would typically be a valid address ID from your DB)
+                skatesPhoto,
+                30, // available quantity
+                3,  // in-use quantity
+                false, // not deleted
+                null,  // photo (optional)
+                null   // reserved list (optional)
         );
         skates = productRepository.save(skates);
 
-        // Rental Units
-        RentalUnit hourly = new RentalUnit(UUID.randomUUID(), "hour", BigDecimal.valueOf(5.00), skates);
-        RentalUnit daily = new RentalUnit(UUID.randomUUID(), "day", BigDecimal.valueOf(25.00), skates);
-        RentalUnit weekly = new RentalUnit(UUID.randomUUID(), "week", BigDecimal.valueOf(100.00), skates);
+        // Rental Units for the product
+        RentalUnit hourly = new RentalUnit(UUID.randomUUID(), "sati", "hour", BigDecimal.valueOf(5.00), skates);
+        RentalUnit daily = new RentalUnit(UUID.randomUUID(), "dnevno", "day", BigDecimal.valueOf(25.00), skates);
+        RentalUnit weekly = new RentalUnit(UUID.randomUUID(), "nedeljno","week", BigDecimal.valueOf(100.00), skates);
 
         rentalUnitRepository.saveAll(List.of(hourly, daily, weekly));
 
-        // Categories
+        // Product Categories
         ProductCategory men = new ProductCategory(
                 UUID.randomUUID(),
                 skates,
                 "Gender",
                 "Men",
                 20,
-                null
+                null  // No parent category
         );
 
         ProductCategory women = new ProductCategory(
@@ -70,7 +84,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Gender",
                 "Women",
                 15,
-                null
+                null  // No parent category
         );
 
         ProductCategory size43 = new ProductCategory(
@@ -79,7 +93,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Size",
                 "43",
                 10,
-                men
+                men // Parent category is "Men"
         );
 
         ProductCategory size38 = new ProductCategory(
@@ -88,8 +102,10 @@ public class DataInitializer implements CommandLineRunner {
                 "Size",
                 "38",
                 5,
-                women
+                women // Parent category is "Women"
         );
+
+        // Save categories
         productCategoryRepository.saveAll(List.of(men, women, size43, size38));
 
         System.out.println("Data Initialized Successfully");

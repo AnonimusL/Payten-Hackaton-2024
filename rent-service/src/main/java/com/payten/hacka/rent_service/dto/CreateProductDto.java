@@ -14,7 +14,9 @@ import java.util.UUID;
 @Setter
 public class CreateProductDto {
     private String name;
+    private String nameEn;
     private String category;
+    private String categoryEn;
     private UUID businessId;
     private UUID addressId;
     private int available;

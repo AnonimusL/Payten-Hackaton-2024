@@ -1,9 +1,6 @@
 package com.payten.hacka.rent_service.controller;
 
-import com.payten.hacka.rent_service.dto.CreateProductDto;
-import com.payten.hacka.rent_service.dto.ProductCategoryDto;
-import com.payten.hacka.rent_service.dto.ProductDetailDto;
-import com.payten.hacka.rent_service.dto.ProductDto;
+import com.payten.hacka.rent_service.dto.*;
 import com.payten.hacka.rent_service.service.ProductService;
 import com.payten.hacka.rent_service.service.ReservationService;
 import lombok.AllArgsConstructor;
@@ -32,8 +29,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProducts(){
-        return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
+    public ResponseEntity<ProductsPerCategoryDto> getAllProducts(@RequestParam(required = false) String categoryName){
+        return new ResponseEntity<>(productService.findAll(categoryName), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/available")
@@ -42,7 +39,7 @@ public class ProductController {
     }
 
     @GetMapping("/location/{id}")
-    public ResponseEntity<List<ProductDto>> getAllProducts(@PathVariable("id") UUID locationId){
+    public ResponseEntity<ProductsPerCategoryDto> getAllProducts(@PathVariable("id") UUID locationId){
         return new ResponseEntity<>(productService.findAllByLocation(locationId), HttpStatus.OK);
     }
 

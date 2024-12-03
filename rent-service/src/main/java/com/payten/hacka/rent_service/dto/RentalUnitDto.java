@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 @Setter
 public class RentalUnitDto {
     private String unitName;
-
+    private String unitNameEn;
     private BigDecimal pricePerUnit;
 }

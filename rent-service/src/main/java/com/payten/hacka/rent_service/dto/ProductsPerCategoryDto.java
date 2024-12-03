@@ -5,16 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class CreateReservationDto {
-    private UUID product;
-    private UUID rentalUnit;
-    private int amount;
-    private LocalDateTime reservedFrom;
+public class ProductsPerCategoryDto {
+    private Map<String, List<ProductDto>> products;
 }

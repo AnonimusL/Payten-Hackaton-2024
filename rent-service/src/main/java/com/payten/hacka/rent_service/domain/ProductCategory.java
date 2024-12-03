@@ -22,6 +22,7 @@ public class ProductCategory {
     @ManyToOne
     private Product product;
     private String name;
+    private String nameEn;
     private String catValue;
     private int amount;
     @ManyToOne

@@ -25,6 +25,7 @@ public class RentalUnit {
     private UUID id;
     @NotBlank
     private String unitName; // "hour", "day", "week", "custom-unit"
+    private String unitNameEn;
     @NotNull
     private BigDecimal pricePerUnit;
     @ManyToOne

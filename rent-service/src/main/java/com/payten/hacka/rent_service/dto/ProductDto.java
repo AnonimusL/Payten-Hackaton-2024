@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -15,7 +14,11 @@ import java.util.UUID;
 public class ProductDto {
     private UUID id;
     private String name;
+    private String nameEn;
+    private String encodedPhoto;
     private String category;
+    private String categoryEn;
     private UUID businessId;
     private UUID addressId;
+
 }

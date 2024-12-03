@@ -18,9 +18,13 @@ public class Product {
     @Id
     private UUID id;
     private String name;
+    private String nameEn;
     private String category;
+    private String categoryEn;
     private UUID businessId;
     private UUID addressId;
+    @Lob
+    private byte[] photo;
     private int amount;
     private int maxNumForRent;
     private boolean deleted;

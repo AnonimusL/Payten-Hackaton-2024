@@ -16,6 +16,7 @@ import java.util.UUID;
 public class ProductCategoryDto {
     private UUID id;
     private String name;
+    private String nameEn;
     private String catValue;
     private int amount;
     private int inUse;
