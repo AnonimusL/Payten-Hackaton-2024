@@ -11,12 +11,12 @@ public class RMQConfig {
 
     @Bean
     public TopicExchange exchange() {
-        return new TopicExchange("application_exchange");
+        return new TopicExchange("application_exchange_new");
     }
 
     @Bean
     public Queue topicQueue() {
-        return new Queue("application_topic_queue", true, false, true);
+        return new Queue("application_topic_queue_new", true, false, true);
     }
 
     @Bean
