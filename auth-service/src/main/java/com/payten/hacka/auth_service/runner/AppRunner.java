@@ -93,7 +93,7 @@ public class AppRunner {
             business1.setAddresses(List.of(address2, address4));
             business2.setAddresses(List.of(address3, address4));
             business3.setAddresses(List.of(address3, address5));
-            business4.setAddresses(List.of(address4));
+            business4.setAddresses(List.of(address6));
 
             addressRepository.save(address2);
             addressRepository.save(address3);
