@@ -13,4 +13,6 @@ public interface ReservationService {
     ReservationDto makeReservation(CreateReservationDto createReservationDto);
     Boolean cancelReservation(UUID reservationId);
     ReservationDto completeReservation(UUID reservationId);
+
+    ReservationDto getReservation(UUID reservationId);
 }

@@ -81,6 +81,11 @@ public class ReservationServiceImpl implements ReservationService {
         return null;
     }
 
+    @Override
+    public ReservationDto getReservation(UUID reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()->new NotFoundException(String.format("reservation with id: %s not found", reservationId)));
+        return modelMapper.map(reservation, ReservationDto.class);
+    }
 
 
 }

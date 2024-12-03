@@ -20,6 +20,12 @@ public class ReservationController {
     public ResponseEntity<ReservationDto> createReservation(@RequestBody CreateReservationDto createReservationDto){
         return new ResponseEntity<>(reservationService.makeReservation(createReservationDto), HttpStatus.OK);
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity<ReservationDto> getReservationInfo(@PathVariable("id") UUID reservationId){
+        return new ResponseEntity<>(reservationService.getReservation(reservationId), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> cancelReservation(@PathVariable("id") UUID reservationId){
         return new ResponseEntity<>(reservationService.cancelReservation(reservationId), HttpStatus.OK);
